@@ -72,7 +72,7 @@ for(var c = 0; c < brickColumnCount; c++) {
     }
 }
 
-//Looper gjennom alle bricks i arrayen over og tegner de på brettet
+//Looper gjennom alle bricks i arrayen over og tegner de på brettet på riktig sted
 function drawBricks() {
     for(var c = 0; c < brickColumnCount; c++) {
         for(var r = 0; r < brickRowCount; r++) {
@@ -131,6 +131,7 @@ function draw() {
         dy = -dy;
         changeColor();
     } 
+    //Sjekker om ballen treffer paddle
     else if(y + dy > canvas.height - ballRadius) {
         if(x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
@@ -209,7 +210,10 @@ function collisionDetection() {
         for(var r = 0; r < brickRowCount; r++) {
             var b = bricks[c][r];
             if(b.status == 1) {
-                if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                if(x + ballRadius > b.x && //Lagt til +/- ballRadius på if-sjekken for å kjøre kollisjon fra kanten av ballen
+                   x - ballRadius < b.x + brickWidth && 
+                   y + ballRadius > b.y && 
+                   y - ballRadius < b.y + brickHeight) {
                     dy = -dy;
                     b.status = 0;
                     score++;
@@ -227,4 +231,6 @@ function collisionDetection() {
 
 //Lagrer funksjonen setInterval i en variabel
 // var interval = setInterval(draw, 10);
+
+//Her brukes requestAnimationFrame for å styre interval/animasjon/tid, derfor kaller vi bare funksjonen
 draw();
